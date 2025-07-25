@@ -11,4 +11,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    allowedHosts: ['nuobxv-ip-190-240-42-226.tunnelmole.net'],
+  },
 })
