@@ -1,422 +1,528 @@
+"use client"
 
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { ArrowRight, CheckCircle, Star, Target, TrendingUp, Award, Clock, Shield } from "lucide-react"
-import { Link } from "react-router"
+import {
+    ArrowRight,
+    CheckCircle,
+    Star,
+    Target,
+    TrendingUp,
+    Award,
+    Clock,
+    Shield,
+
+    Zap,
+    Dumbbell,
+    Users,
+    Calendar,
+} from "lucide-react";
+
 import Navbar from "../components/nav"
+import { getWhatsAppLink } from "@/utils/wathsapp-link";
+import { getMakeConsultationLink } from "@/utils/codenly-link";
+import { ButtonInfo } from "@/components/button-info";
 
 export default function HomePage() {
+    const [scrollY, setScrollY] = useState(0)
+
+    useEffect(() => {
+        const handleScroll = () => setScrollY(window.scrollY)
+        window.addEventListener("scroll", handleScroll)
+        return () => window.removeEventListener("scroll", handleScroll)
+    }, [])
+
+    // Ignore MetaMask connection failures in environments where the wallet
+    // extension isn’t available (e.g. v0 preview, mobile Safari, etc.).
+    useEffect(() => {
+        function handleUnhandled(event: PromiseRejectionEvent) {
+        const reason = event?.reason
+        // Some wallet libraries throw:  "Failed to connect to MetaMask"
+            if (
+                typeof reason === "string"
+                ? reason.includes("Failed to connect to MetaMask")
+                : reason?.message?.includes?.("Failed to connect to MetaMask")
+            ) {
+                // Prevent the default unhandled-rejection logging and keep the app running
+                console.warn("MetaMask connection failed – continuing without wallet.")
+                event.preventDefault()
+            }
+        }
+
+        window.addEventListener("unhandledrejection", handleUnhandled)
+        return () => window.removeEventListener("unhandledrejection", handleUnhandled)
+    }, [])
+
+    const handleWhatsAppClick = () => {
+        const message = 'Hola Laura, quiero que seas mi personal trainer. Cuando empezamos pues?'; // Mensaje que quieres enviar
+        const phoneNumber = '573242874190'; // Número de teléfono al que deseas enviar el mensaje
+
+        const whatsappUrl = getWhatsAppLink(phoneNumber, message);
+        window.open(whatsappUrl, '_blank');
+    }
+
+    const handleMakeConsultationClick = () => {
+        const link = getMakeConsultationLink();
+        window.open(link, '_blank');
+    }
 
     return (
-        <div className="min-h-screen bg-black text-white">
-        {/* Navigation */}
-        <Navbar />
-        
+        <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white relative overflow-x-hidden">
+            {/* Responsive Animated Background Elements */}
+            <div className="fixed inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute -top-20 -right-20 sm:-top-40 sm:-right-40 w-40 h-40 sm:w-80 sm:h-80 bg-gradient-to-br 
+                    from-orange-500/20 to-red-500/20 rounded-full blur-2xl sm:blur-3xl animate-pulse"></div>
+                <div className="absolute top-1/2 -left-20 sm:-left-40 w-48 h-48 sm:w-96 sm:h-96 bg-gradient-to-br from-gray-800/15
+                    to-gray-700/15 rounded-full blur-2xl sm:blur-3xl animate-pulse delay-1000"></div>
+                <div className="absolute bottom-0 right-1/4 w-32 h-32 sm:w-64 sm:h-64 bg-gradient-to-br from-orange-500/15
+                    to-orange-600/15 rounded-full blur-2xl sm:blur-3xl animate-pulse delay-2000"></div>
+            </div>
 
-        {/* Hero Section */}
-        <section className="flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-12 py-16 sm:py-20 lg:py-32 mt-16">
-            <div className="w-full lg:w-1/2 mb-8 sm:mb-12 lg:mb-0">
-                <div className="relative">
-                    <img
-                    src="/src/assets/images/logo-1.png"
-                    alt="Muscular man doing bicep curls"
-                    width={550}
-                    height={600}
-                    className="object-cover max-h-[500px] sm:max-h-[600px] lg:max-h-none"
-                    />
-                    {/* <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-lg"></div> */}
+            {/* Responsive Floating Particles */}
+            <div className="fixed inset-0 overflow-hidden pointer-events-none">
+                {/* {[...Array(10)].map((_, i) => (
+                    <div
+                        key={i}
+                        className="absolute w-1 h-1 sm:w-2 sm:h-2 bg-orange-500/30 rounded-full animate-float"
+                        style={{
+                            left: `${Math.random() * 100}%`,
+                            top: `${Math.random() * 100}%`,
+                            animationDelay: `${Math.random() * 5}s`,
+                            animationDuration: `${3 + Math.random() * 4}s`,
+                        }}
+                    ></div>
+                ))} */}
+            </div>
+
+            {/* Fully Responsive Navigation */}
+            <Navbar />
+
+            {/* Fully Responsive Hero Section */}
+            <section className="flex flex-col lg:flex-row items-center justify-between px-3 sm:px-4 md:px-6 lg:px-12 py-16 sm:py-20 
+                md:py-24 lg:py-32 mt-16 sm:mt-20 relative">
+                <div className="w-full lg:w-1/2 mb-8 sm:mb-12 lg:mb-0 relative">
+                    <div className="relative group">
+                        <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-br from-orange-400/90 to-red-400/70 rounded-2xl 
+                            sm:rounded-2xl blur-xl sm:blur-2xl group-hover:blur-2xl sm:group-hover:blur-3xl transition-all duration-500"></div>
+                        <img
+                            src="/src/assets/images/lau-full.webp"
+                            alt="Muscular man doing bicep curls"
+                            width={600}
+                            height={700}
+                            className="relative object-cover rounded-2xl sm:rounded-3xl w-full h-auto max-h-[400px] sm:max-h-[600px] 
+                            md:max-h-[600px] lg:max-h-none shadow-xl sm:shadow-2xl shadow-gray-900/10 group-hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-transparent rounded-2xl sm:rounded-3xl"></div>
+
+                        {/* Responsive Floating Stats */}
+                        <div className="absolute top-4 sm:top-8 right-4 sm:right-8 bg-white/90 backdrop-blur-xl rounded-xl 
+                            sm:rounded-2xl p-3 sm:p-4 shadow-xl shadow-gray-900/10 animate-float">
+                            <div className="text-lg sm:text-2xl font-bold text-orange-600">98%</div>
+                        <div className="text-xs text-gray-600">Tasa de éxito</div>
+                        </div>
+
+                        <div className="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 bg-white/90 backdrop-blur-xl rounded-xl 
+                            sm:rounded-2xl p-3 sm:p-4 shadow-xl shadow-gray-900/10 animate-float delay-1000">
+                            <div className="text-lg sm:text-2xl font-bold text-gray-800">Mas de 100</div>
+                            <div className="text-xs text-gray-600">Clientes Satisfechos </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div className="w-full lg:w-1/2 lg:pl-16">
-            <div className="max-w-lg mx-auto lg:mx-0 text-center lg:text-left">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-6 sm:mb-8 leading-tight">
-                <span className="text-lime-400">AGING IS A DISEASE.</span>
-                <br />
-                <span className="text-white italic font-light">
-                    SLOWING IT DOWN IS
-                    <br />
-                    THE ART OF LONGEVITY.
-                </span>
-                </h1>
+                <div className="w-full lg:w-1/2 lg:pl-12 xl:pl-20">
+                    <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left">
+                        <div className="inline-flex items-center px-3 sm:px-4 py-2 bg-gradient-to-r from-orange-900/30 to-red-900/30 border
+                        border-orange-500/30 rounded-full text-xs sm:text-sm font-bold text-orange-300 mb-6 sm:mb-8 shadow-lg">
+                            Tu bienestar es mi prioridad. Vamos con todo.
+                        </div>
 
-                <p className="text-lg sm:text-xl mb-6 sm:mb-8 text-gray-300">Test, don't guess.</p>
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-6 sm:mb-8 leading-tight">
+                            <span className="bg-gradient-to-r from-white via-gray-100 to-orange-500 bg-clip-text text-transparent animate-gradient">
+                                Transforma tu cuerpo.
+                            </span>
+                            <br />
+                            <span className="text-gray-200 italic font-light">
+                                Entrena conmigo.  
+                            </span>
+                        </h1>
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Button
-                    variant="outline"
-                    className="border-lime-400 text-lime-400 hover:bg-lime-400 hover:text-black px-6 sm:px-8 py-3 sm:py-4 rounded-full text-sm font-medium group bg-transparent w-full sm:w-auto"
-                >
-                    APPLY NOW
-                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
-                <Button
-                    variant="ghost"
-                    className="text-white hover:text-lime-400 px-6 sm:px-8 py-3 sm:py-4 rounded-full text-sm font-medium w-full sm:w-auto"
-                >
-                    LEARN MORE
-                </Button>
+                        <p className="text-lg sm:text-xl md:text-2xl mb-8 sm:mb-10 text-gray-300 font-medium">
+                            Descubre tu potencial con entrenamientos personalizados que se adaptan a tu estilo de vida.
+                        </p>
+
+                        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center lg:justify-start">
+                            <button className="cursor-pointer group relative px-6 sm:px-8 md:px-10 py-4 sm:py-5 bg-gradient-to-r from-orange-500 via-orange-600
+                                to-red-600 text-white font-bold rounded-xl sm:rounded-2xl text-base sm:text-lg overflow-hidden transform hover:scale-105
+                                transition-all duration-300 shadow-2xl shadow-orange-500/25"
+                                onClick={handleWhatsAppClick} >
+                                <span className="relative z-10 flex items-center justify-center">
+                                    {/* <Zap className="w-4 h-4 sm:w-5 sm:h-5 mr-2" /> */}
+                                    <svg  xmlns="http://www.w3.org/2000/svg"  
+                                        width="24"  
+                                        height="24"  
+                                        viewBox="0 0 24 24"  
+                                        fill="none"  
+                                        stroke="currentColor"  
+                                        stroke-width="2" 
+                                        className="icon icon-tabler icons-tabler-outline icon-tabler-brand-whatsapp mr-1">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9" />
+                                        <path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1" />
+                                    </svg>
+                                        APLICAR AHORA
+                                    <ArrowRight className="ml-3 sm:ml-3 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                                </span>
+                                <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-orange-500 translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                                <div className="absolute inset-0 bg-white/10 scale-0 group-hover:scale-100 rounded-xl sm:rounded-2xl transition-transform duration-700"></div>
+                            </button>
+
+                            <button className=" cursor-pointer group px-6 sm:px-8 md:px-10 py-4 sm:py-5 bg-slate-800/80 backdrop-blur-xl text-white font-bold rounded-xl
+                                sm:rounded-2xl text-base sm:text-lg border-2 border-orange-500/50 hover:border-orange-400 hover:bg-orange-500/10 transition-all duration-300 shadow-xl shadow-black/20">
+                                <span className="flex items-center justify-center">
+                                MAS INFO
+                                <ArrowRight className="ml-2 sm:ml-3 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                                </span>
+                            </button>
+                        </div>
+
+                        {/* Responsive Trust Indicators */}
+                        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 sm:gap-6 md:gap-8 mt-8 sm:mt-12 text-xs sm:text-sm text-gray-400">
+                            <div className="flex items-center gap-2">
+                                <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-orange-500" />
+                                <span>Consulta gratuita</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-orange-500" />
+                                <span>100% Confidencial</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-orange-500" />
+                                <span>Garantía de 30 días</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            </div>
-        </section>
+            </section>
 
-        {/* Media Logos Section */}
-        <section className="px-4 sm:px-6 lg:px-12 py-8 sm:py-12 border-t border-gray-800">
-            <p className="text-center text-gray-400 mb-6 sm:mb-8 text-sm">AS FEATURED IN</p>
-            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 lg:gap-8 opacity-60">
-            <div className="text-lg sm:text-xl lg:text-2xl font-bold tracking-wider">MEN'S FITNESS</div>
-            <div className="text-lg sm:text-xl lg:text-2xl font-serif italic">Forbes</div>
-            <div className="text-lg sm:text-xl lg:text-2xl font-bold">ESPN</div>
-            <div className="text-lg sm:text-xl lg:text-2xl font-light">askmen°</div>
-            <div className="text-lg sm:text-xl lg:text-2xl font-light">Entrepreneur</div>
-            </div>
-        </section>
-
-        {/* What is FitScript Section */}
-        <section id="what-is" className="px-4 sm:px-6 lg:px-12 py-16 sm:py-20 lg:py-24 bg-gray-900/50">
-            <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12 sm:mb-16">
-                <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">
-                WHAT IS <span className="text-lime-400">FITSCRIPT</span>?
-                </h2>
-                <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto px-4">
-                FitScript is a revolutionary approach to longevity and optimal health. We combine cutting-edge science,
-                personalized testing, and expert guidance to help you age backwards.
+            {/* Responsive Media Logos Section */}
+            <section className="px-3 sm:px-4 md:px-6 lg:px-12 py-12 sm:py-16 border-t border-gray-800/50 bg-black/80 backdrop-blur-xl">
+                <p className="text-center text-gray-400 mb-8 sm:mb-12 text-xs sm:text-sm font-semibold tracking-wider">
+                    COMO APARECE EN
                 </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                <Card className="bg-black border-gray-800">
-                <CardContent className="p-6 sm:p-8 text-center">
-                    <Target className="h-10 w-10 sm:h-12 sm:w-12 text-lime-400 mx-auto mb-4" />
-                    <h3 className="text-lg sm:text-xl font-bold mb-4">PRECISION TESTING</h3>
-                    <p className="text-gray-300 text-sm sm:text-base">
-                    Comprehensive biomarker analysis to understand your unique biological age and health markers.
-                    </p>
-                </CardContent>
-                </Card>
-
-                <Card className="bg-black border-gray-800">
-                <CardContent className="p-6 sm:p-8 text-center">
-                    <TrendingUp className="h-10 w-10 sm:h-12 sm:w-12 text-lime-400 mx-auto mb-4" />
-                    <h3 className="text-lg sm:text-xl font-bold mb-4">PERSONALIZED PROTOCOLS</h3>
-                    <p className="text-gray-300 text-sm sm:text-base">
-                    Custom nutrition, exercise, and lifestyle interventions based on your specific test results.
-                    </p>
-                </CardContent>
-                </Card>
-
-                <Card className="bg-black border-gray-800 sm:col-span-2 lg:col-span-1">
-                <CardContent className="p-6 sm:p-8 text-center">
-                    <Award className="h-10 w-10 sm:h-12 sm:w-12 text-lime-400 mx-auto mb-4" />
-                    <h3 className="text-lg sm:text-xl font-bold mb-4">EXPERT GUIDANCE</h3>
-                    <p className="text-gray-300 text-sm sm:text-base">
-                    Work directly with longevity specialists and health optimization experts.
-                    </p>
-                </CardContent>
-                </Card>
-            </div>
-            </div>
-        </section>
-
-        {/* How It Works Section */}
-        <section id="how-it-works" className="px-4 sm:px-6 lg:px-12 py-16 sm:py-20 lg:py-24">
-            <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12 sm:mb-16">
-                <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">
-                HOW IT <span className="text-lime-400">WORKS</span>
-                </h2>
-                <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto px-4">
-                Our proven 4-step process to optimize your health and extend your healthspan.
-                </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-                {[
-                {
-                    step: "01",
-                    title: "CONSULTATION",
-                    description: "Initial assessment and goal setting with our longevity experts.",
-                },
-                {
-                    step: "02",
-                    title: "TESTING",
-                    description: "Comprehensive biomarker testing and health analysis.",
-                },
-                {
-                    step: "03",
-                    title: "PROTOCOL",
-                    description: "Personalized intervention plan based on your results.",
-                },
-                {
-                    step: "04",
-                    title: "OPTIMIZATION",
-                    description: "Ongoing monitoring and protocol refinement.",
-                },
-                ].map((item, index) => (
-                <div key={index} className="text-center">
-                    <div className="text-5xl sm:text-6xl font-bold text-lime-400 mb-2 sm:mb-4">{item.step}</div>
-                    <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-4">{item.title}</h3>
-                    <p className="text-gray-300 text-sm sm:text-base">{item.description}</p>
+                <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-16 opacity-60 hover:opacity-80 transition-opacity duration-300">
+                    <div className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold tracking-wider text-gray-300 hover:text-orange-500 transition-colors duration-300">
+                        Tik-Tok
+                    </div>
+                    <div className="text-sm sm:text-lg md:text-xl lg:text-2xl font-serif italic text-gray-300 hover:text-orange-500 transition-colors duration-300">
+                        Instagram
+                    </div>
+                    <div className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-300 hover:text-orange-500 transition-colors duration-300">
+                        Facebook
+                    </div>
+                    <div className="text-sm sm:text-lg md:text-xl lg:text-2xl font-light text-gray-300 hover:text-orange-500 transition-colors duration-300">
+                        Youtube
+                    </div>
+                    <div className="text-sm sm:text-lg md:text-xl lg:text-2xl font-light text-gray-300 hover:text-orange-500 transition-colors duration-300">
+                        LinkedIn
+                    </div>
                 </div>
-                ))}
-            </div>
-            </div>
-        </section>
+            </section>
 
-        {/* Success Stories Section */}
-        <section id="success" className="px-4 sm:px-6 lg:px-12 py-16 sm:py-20 lg:py-24 bg-gray-900/50">
-            <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12 sm:mb-16">
-                <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">
-                SUCCESS <span className="text-lime-400">STORIES</span>
-                </h2>
-                <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto px-4">
-                Real results from real people who've transformed their health and longevity.
-                </p>
-            </div>
+            {/* Responsive What is FitScript Section */}
+            <section id="what-is" className="px-3 sm:px-4 md:px-6 lg:px-12 py-16 sm:py-20 md:py-24 lg:py-32 relative">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-16 sm:mb-20">
+                        <div className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-orange-900/30 to-red-900/30 border border-orange-500/30 rounded-full text-xs sm:text-sm font-bold text-orange-300 mb-6 sm:mb-8 shadow-lg">
+                            <Target className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                            Nuestro enfoque revolucionario
+                        </div>
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-6 sm:mb-8 text-white">
+                            PORQUE ELEGIR A{" "}
+                            <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
+                                LAURA
+                            </span>
+                            ?
+                        </h2>
+                        <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-4">
+                            Laura usa un enfoque revolucionario para la longevidad y una salud óptima. Combinamos 
+                            pruebas personalizadas y asesoramiento experto para ayudarte a envejecer al revés.
+                        </p>
+                    </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                {[
-                {
-                    name: "Michael R.",
-                    age: "52",
-                    result: "Reduced biological age by 8 years",
-                    quote:
-                    "I feel better at 52 than I did at 40. The FitScript protocol completely transformed my energy and vitality.",
-                },
-                {
-                    name: "Sarah L.",
-                    age: "45",
-                    result: "Lost 30lbs, gained muscle mass",
-                    quote:
-                    "The personalized approach made all the difference. Finally, a program that actually works for my body.",
-                },
-                {
-                    name: "David K.",
-                    age: "38",
-                    result: "Optimized sleep and recovery",
-                    quote:
-                    "My sleep quality improved dramatically, and my recovery time is now half of what it used to be.",
-                },
-                ].map((story, index) => (
-                <Card key={index} className="bg-black border-gray-800">
-                    <CardContent className="p-6 sm:p-8">
-                    <div className="flex mb-4">
-                        {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="h-5 w-5 text-lime-400 fill-current" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
+                        {[
+                            {
+                                icon: Target,
+                                title: "PRECISION TESTING",
+                                description:
+                                "Comprehensive biomarker analysis to understand your unique biological age and health markers.",
+                                gradient: "from-blue-500 to-cyan-500",
+                            },
+                            {
+                                icon: TrendingUp,
+                                title: "PERSONALIZED PROTOCOLS",
+                                description:
+                                "Custom nutrition, exercise, and lifestyle interventions based on your specific test results.",
+                                gradient: "from--500 to-emerald-500",
+                            },
+                            {
+                                icon: Award,
+                                title: "EXPERT GUIDANCE",
+                                description: "Work directly with longevity specialists and health optimization experts.",
+                                gradient: "from-purple-500 to-pink-500",
+                            },
+                        ].map((item, index) => (
+                            <Card
+                                key={index}
+                                className="group bg-slate-800/80 backdrop-blur-xl border border-slate-700/50 shadow-xl shadow-black/20
+                                hover:shadow-2xl hover:shadow-yellow-500/10 transition-all duration-500 hover:-translate-y-2 rounded-2xl 
+                                sm:rounded-3xl overflow-hidden"
+                            >
+                                <CardContent className="p-6 sm:p-8 lg:p-10 text-center relative">
+                                    <div className={`w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br ${item.gradient} rounded-xl sm:rounded-2xl flex items-center justify-center 
+                                        mx-auto mb-4 sm:mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg`}>
+                                        <item.icon className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+                                    </div>
+                                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-4 sm:mb-6 text-white">{item.title}</h3>
+                                    <p className="text-gray-300 leading-relaxed text-base sm:text-lg">{item.description}</p>
+                                    <div
+                                        className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-5 transition-opacity
+                                        duration-500 rounded-2xl sm:rounded-3xl`}>
+                                    </div>
+                                </CardContent>
+                            </Card>
                         ))}
                     </div>
-                    <p className="text-gray-300 mb-6 italic">"{story.quote}"</p>
-                    <div className="border-t border-gray-800 pt-4">
-                        <p className="font-bold">
-                        {story.name}, {story.age}
+                </div>
+            </section>
+
+            {/* Premium How It Works Section */}
+            <section id="how-it-works" className="px-4 sm:px-6 lg:px-12 py-20 sm:py-24 lg:py-32 bg-slate-800/70 backdrop-blur-xl">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-20">
+                        <h2 className="text-4xl sm:text-5xl lg:text-7xl font-black mb-8 text-white">
+                            CÓMO{" "}
+                            <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">FUNCIONA</span>
+                        </h2>
+                            <p className="text-xl sm:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+                            Nuestro proceso probado de 4 pasos para optimizar su salud y extender su esperanza de vida.
                         </p>
-                        <p className="text-lime-400 text-sm">{story.result}</p>
                     </div>
-                    </CardContent>
-                </Card>
-                ))}
-            </div>
-            </div>
-        </section>
 
-        {/* Stats Section */}
-        <section className="px-4 sm:px-6 lg:px-12 py-16 sm:py-20 lg:py-24">
-            <div className="max-w-6xl mx-auto">
-            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center">
-                {[
-                { number: "1000+", label: "Clients Transformed" },
-                { number: "15+", label: "Years Average Age Reduction" },
-                { number: "98%", label: "Client Satisfaction" },
-                { number: "24/7", label: "Expert Support" },
-                ].map((stat, index) => (
-                <div key={index}>
-                    <div className="text-4xl sm:text-5xl font-bold text-lime-400 mb-2">{stat.number}</div>
-                    <div className="text-gray-300 text-sm sm:text-base">{stat.label}</div>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+                        {[
+                            {
+                                step: "01",
+                                title: "CONSULTA",
+                                description: "Evaluación inicial y establecimiento de objetivos con nuestros expertos en longevidad.",
+                            },
+                            {
+                                step: "02",
+                                title: "PRUEBAS",
+                                description: "Pruebas integrales de biomarcadores y análisis de salud.",
+                            },
+                            {
+                                step: "03",
+                                title: "PROTOCOLO",
+                                description: "Plan de intervención personalizado en función de tus resultados.",
+                            },
+                            {
+                                step: "04",
+                                title: "MEJORAMIENTO",
+                                description: "Monitoreo continuo y perfeccionamiento del protocolo.",
+                            },
+                        ].map((item, index) => (
+                            <div key={index} className="text-center">
+                                <div key={index} className="text-center">
+                                    <div className="text-5xl sm:text-6xl font-bold text-orange-500 mb-4 sm:mb-6">{item.step}</div>
+                                    <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-white">{item.title}</h3>
+                                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed">{item.description}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                ))}
-            </div>
-            </div>
-        </section>
+            </section>
 
-        {/* Our Team Section */}
-        <section id="team" className="px-4 sm:px-6 lg:px-12 py-16 sm:py-20 lg:py-24 bg-gray-900/50">
-            <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12 sm:mb-16">
-                <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">
-                OUR <span className="text-lime-400">TEAM</span>
-                </h2>
-                <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto px-4">
-                World-class experts in longevity, nutrition, and human optimization.
-                </p>
-            </div>
+            {/* Premium Success Stories Section */}
+            <section id="success" className="px-4 sm:px-6 lg:px-12 py-20 sm:py-24 lg:py-32 bg-slate-800/70 backdrop-blur-xl">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-20">
+                        <h2 className="text-4xl sm:text-5xl lg:text-7xl font-black mb-8 text-white">
+                            <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
+                                HISTORIAS DE{" "}
+                            </span>
+                            ÉXITO
+                        </h2>
+                        <p className="text-xl sm:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+                            Nuestros Resultados reales de personas reales que han transformado su salud y longevidad.
+                        </p>
+                    </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                {[
-                {
-                    name: "Dr. James Wilson",
-                    title: "Chief Longevity Officer",
-                    credentials: "MD, PhD in Molecular Biology",
-                },
-                {
-                    name: "Dr. Maria Rodriguez",
-                    title: "Head of Nutrition",
-                    credentials: "PhD in Nutritional Science",
-                },
-                {
-                    name: "Dr. Alex Chen",
-                    title: "Exercise Physiologist",
-                    credentials: "PhD in Exercise Science",
-                },
-                ].map((member, index) => (
-                <Card key={index} className="bg-black border-gray-800">
-                    <CardContent className="p-6 sm:p-8 text-center">
-                    <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gray-700 rounded-full mx-auto mb-4"></div>
-                    <h3 className="text-lg sm:text-xl font-bold mb-2">{member.name}</h3>
-                    <p className="text-lime-400 mb-2">{member.title}</p>
-                    <p className="text-gray-400 text-sm sm:text-base">{member.credentials}</p>
-                    </CardContent>
-                </Card>
-                ))}
-            </div>
-            </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="px-4 sm:px-6 lg:px-12 py-16 sm:py-20 lg:py-24">
-            <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-6 sm:mb-8">
-                READY TO <span className="text-lime-400">TRANSFORM</span> YOUR LIFE?
-            </h2>
-            <p className="text-lg sm:text-xl text-gray-300 mb-8 sm:mb-12 max-w-2xl mx-auto px-4">
-                Join thousands of people who have already discovered the secret to aging backwards. Your journey to optimal
-                health starts with a single consultation.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button className="bg-lime-400 hover:bg-lime-500 text-black font-semibold px-8 sm:px-12 py-3 sm:py-4 rounded-full text-lg">
-                SCHEDULE FREE CONSULT
-                </Button>
-                <Button
-                variant="outline"
-                className="border-lime-400 text-lime-400 hover:bg-lime-400 hover:text-black px-8 sm:px-12 py-3 sm:py-4 rounded-full text-lg bg-transparent"
-                >
-                LEARN MORE
-                </Button>
-            </div>
-
-            <div className="flex items-center justify-center gap-4 sm:gap-8 mt-8 sm:mt-12 text-sm text-gray-400">
-                <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-lime-400" />
-                <span>Free Consultation</span>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+                        {[
+                            {
+                                name: "Michael R.",
+                                age: "52",
+                                result: "Edad biológica reducida en 8 años",
+                                quote:
+                                "Me siento mejor a los 52 que a los 40. El protocolo FitScript transformó por completo mi energía y vitalidad",
+                            },
+                            {
+                                name: "Sarah L.",
+                                age: "45",
+                                result: "Perdí 30 libras, gané masa muscular.",
+                                quote:
+                                "El enfoque personalizado marcó la diferencia. Por fin, un programa que realmente funciona para mi cuerpo .",
+                            },
+                            {
+                                name: "David K.",
+                                age: "38",
+                                result: "Sueño y recuperación optimizados",
+                                quote:
+                                "Mi calidad de sueño mejoró drásticamente y ahora mi tiempo de recuperación es la mitad de lo que solía ser",
+                            },
+                        ].map((story, index) => (
+                            <Card
+                                key={index}
+                                className="bg-slate-800/80 backdrop-blur-xl border border-slate-700/50 shadow-xl shadow-black/20 
+                                    hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-500 hover:-translate-y-2 rounded-3xl overflow-hidden"
+                            >
+                                <CardContent className="p-8 lg:p-10">
+                                <div className="flex mb-6">
+                                    {[...Array(5)].map((_, i) => (
+                                    <Star key={i} className="h-5 w-5 text-orange-500 fill-current" />
+                                    ))}
+                                </div>
+                                <p className="text-gray-300 mb-8 italic leading-relaxed">"{story.quote}"</p>
+                                <div className="border-t border-slate-700/50 pt-6">
+                                    <p className="font-bold text-white">
+                                    {story.name}, {story.age}
+                                    </p>
+                                    <p className="text-orange-500 text-sm">{story.result}</p>
+                                </div>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
                 </div>
-                <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-lime-400" />
-                <span>100% Confidential</span>
-                </div>
-                <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-lime-400" />
-                <span>30-Day Guarantee</span>
-                </div>
-            </div>
-            </div>
-        </section>
+            </section>
 
-        {/* Footer */}
-        <footer className="border-t border-gray-800 px-4 sm:px-6 lg:px-12 py-8 sm:py-12">
-            <div className="max-w-6xl mx-auto">
-            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
-                <div>
-                <h3 className="text-2xl font-bold mb-4">FITSCRIPT</h3>
-                <p className="text-gray-400 mb-4">Revolutionizing longevity through science-based health optimization.</p>
-                <div className="flex space-x-4">
-                    <div className="w-8 h-8 bg-gray-700 rounded"></div>
-                    <div className="w-8 h-8 bg-gray-700 rounded"></div>
-                    <div className="w-8 h-8 bg-gray-700 rounded"></div>
+            {/* Premium Stats Section */}
+            <section className="px-4 sm:px-6 lg:px-12 py-20 sm:py-24 lg:py-32 bg-slate-800/70 backdrop-blur-xl">
+                <div className="max-w-7xl mx-auto">
+                    <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 text-center">
+                        {[
+                            { number: "100+", label: "Clientes transformados", gradient: "from-slate-700 to-slate-800" },
+                            { number: "15+", label: "Años de reducción de edad promedio", gradient: "from-orange-500 to-red-600" },
+                            { number: "98%", label: "Satisfacción del cliente", gradient: "from-slate-600 to-yellow-600" },
+                            { number: "24/7", label: "Soporte de tiempo completo", gradient: "from-orange-500 to-red-600" },
+                        ].map((stat, index) => (
+                            <div key={index} className="relative group">
+                                <div
+                                className={`text-4xl sm:text-5xl font-bold text-white mb-4 ${stat.gradient} rounded-2xl p-4 shadow-lg shadow-black/20 
+                                    group-hover:shadow-2xl group-hover:shadow-yellow-500/10 transition-all duration-500 group-hover:-translate-y-2`}
+                                >
+                                {stat.number}
+                                </div>
+                                <div className="text-gray-300 text-sm sm:text-base leading-relaxed">{stat.label}</div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                </div>
+            </section>
 
-                <div>
-                <h4 className="font-bold mb-4">SERVICES</h4>
-                <ul className="space-y-2 text-gray-400">
-                    <li>
-                    <Link to="#" className="hover:text-lime-400">
-                        Longevity Testing
-                    </Link>
-                    </li>
-                    <li>
-                    <Link to="#" className="hover:text-lime-400">
-                        Nutrition Optimization
-                    </Link>
-                    </li>
-                    <li>
-                    <Link to="#" className="hover:text-lime-400">
-                        Exercise Protocols
-                    </Link>
-                    </li>
-                    <li>
-                    <Link to="#" className="hover:text-lime-400">
-                        Sleep Optimization
-                    </Link>
-                    </li>
-                </ul>
-                </div>
+            {/* Premium Our Team Section */}
+            <section id="team" className="px-4 sm:px-6 lg:px-12 py-20 sm:py-24 lg:py-32 bg-black/80 backdrop-blur-xl">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-20">
+                        <h2 className="text-4xl sm:text-5xl lg:text-7xl font-black mb-8 text-white">
+                            Mis {" "}
+                            <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">Servicios</span>
+                        </h2>
+                        <p className="text-xl sm:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+                            Programas diseñados para adaptarse a tu ritmo de vida y objetivos específicos
+                        </p>
+                    </div>
 
-                <div>
-                <h4 className="font-bold mb-4">COMPANY</h4>
-                <ul className="space-y-2 text-gray-400">
-                    <li>
-                    <Link to="#" className="hover:text-lime-400">
-                        About Us
-                    </Link>
-                    </li>
-                    <li>
-                    <Link to="#" className="hover:text-lime-400">
-                        Our Team
-                    </Link>
-                    </li>
-                    <li>
-                    <Link to="#" className="hover:text-lime-400">
-                        Careers
-                    </Link>
-                    </li>
-                    <li>
-                    <Link to="#" className="hover:text-lime-400">
-                        Press
-                    </Link>
-                    </li>
-                </ul>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+                        {[
+                            {
+                                name: "Entrenamiento 1:1",
+                                title: "Sesiones personalizadas adaptadas a tus objetivos específicos",
+                                price: 80,
+                                gradient: "from-blue-500 to-cyan-500",
+                                icon: <Dumbbell className="w-15 h-15" />
+                            },
+                            {
+                                name: "Asesoría Online",
+                                title: "Seguimiento virtual con planes de entrenamiento personalizados",
+                                price: 150,
+                                gradient: "from--500 to-emerald-500",
+                                icon: <Users className="w-15 h-15" />
+                            },
+                            {
+                                name: "Plan Personalizado",
+                                title: "Un programa completo de 12 semanas con nutrición incluida",
+                                price: 300,
+                                gradient: "from-purple-500 to-pink-500",
+                                icon: <Calendar className="w-15 h-15" />
+                            },
+                        ].map((member, index) => (
+                            <Card
+                                key={index}
+                                className="group bg-slate-800/80 backdrop-blur border border-slate-700/50 shadow-xl shadow-black/20
+                                    hover:shadow-2xl hover:shadow-yellow-500/10 transition-all duration-500 hover:-translate-y-2 rounded-3xl overflow-hidden"
+                            >
+                                <CardContent className="p-8 lg:p-10 text-center relative">
+                                    <div
+                                        className={`w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br ${member.gradient} rounded-2xl mx-auto
+                                            mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg`}
+                                    >
+                                        <div className="w-full h-full rounded-2x flex items-center justify-center">
+                                            {member.icon}
+                                        </div>
+                                    </div>
+                                    <h3 className="text-xl lg:text-2xl font-bold mb-4 text-white">{member.name}</h3>
+                                    <p className="text-orange-500/80 mb-4">{member.title}</p>
+                                    <p className="text-gray-300 text-xl sm:text-base leading-relaxed mb-6">{index === 0 ? `Desde $${member.price}/sesión` : `Desde $${member.price}/mes`}</p>
+                                    < ButtonInfo handleWhatsAppClick={handleWhatsAppClick}/>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
                 </div>
+            </section>
 
-                <div>
-                <h4 className="font-bold mb-4">CONTACT</h4>
-                <ul className="space-y-2 text-gray-400">
-                    <li>hello@fitscript.me</li>
-                    <li>+1 (555) 123-4567</li>
-                    <li>Los Angeles, CA</li>
-                    <li>New York, NY</li>
-                </ul>
-                </div>
-            </div>
+            {/* Premium CTA Section */}
+            <section className="px-4 sm:px-6 lg:px-12 py-20 sm:py-24 lg:py-32 bg-black/80 backdrop-blur-xl">
+                <div className="max-w-4xl mx-auto text-center">
+                    <h2 className="text-4xl sm:text-5xl lg:text-7xl font-black mb-8 text-white">
+                        LISTO PARA{" "}
+                        <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
+                        TRANSFORMAR
+                        </span>{" "}
+                        TU VIDA?
+                    </h2>
+                    <p className="text-xl sm:text-2xl text-gray-300 mb-12 leading-relaxed max-w-2xl mx-auto px-4">
+                        Únase a muchas mas personas que ya han descubierto el secreto para revertir el envejecimiento.
+                        Su camino hacia una salud óptima comienza con una sola consulta.
+                    </p>
 
-            <div className="border-t border-gray-800 mt-8 sm:mt-12 pt-4 sm:pt-8 flex flex-col md:flex-row justify-between items-center">
-                <p className="text-gray-400 text-sm">© 2024 FitScript. All rights reserved.</p>
-                <div className="flex space-x-4 sm:space-x-6 text-sm text-gray-400 mt-4 md:mt-0">
-                <Link to="#" className="hover:text-lime-400">
-                    Privacy Policy
-                </Link>
-                <Link to="#" className="hover:text-lime-400">
-                    Terms of Service
-                </Link>
-                <Link to="#" className="hover:text-lime-400">
-                    Cookie Policy
-                </Link>
+                    <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                        <button onClick={ handleMakeConsultationClick }
+                            className="cursor-pointer group relative px-12 py-6 bg-gradient-to-r from-orange-500 via-orange-600 to-red-600 text-white
+                            font-bold rounded-2xl text-lg overflow-hidden transform hover:scale-105 transition-all duration-300 shadow-2xl shadow-orange-500/25">
+                            <span className="relative z-10 flex items-center justify-center">
+                                <Zap className="w-5 h-5 mr-2" />
+                                PROGRAMAR UNA CONSULTA GRATIS
+                                <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                            </span>
+                            <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-orange-500 translate-y-full group-hover:translate-y-0
+                                transition-transform duration-500"></div>
+                        </button>
+                    </div>
                 </div>
-            </div>
-            </div>
-        </footer>
+            </section>
         </div>
     )
 }
